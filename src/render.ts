@@ -1,5 +1,5 @@
 import { Entity, Sprite, Positioned } from "./scene";
-import { TMXMap, TileLayer } from "./tilemap";
+import { TMXMap, TileLayer, findLayer } from "./tilemap";
 
 function tileForGID(map: TMXMap, gid: number): { src: CanvasImageSource, tx: number, ty: number, tw: number, th: number } {
 	let tsi = map.tileSets.length - 1;
@@ -48,6 +48,11 @@ export function renderStaticTileLayer(map: TMXMap, layerName: string) {
 	canvas.width = width;
 	canvas.height = height;
 	const ctx = canvas.getContext("2d")!;
+
+	const layer = findLayer(map, "tile", layerName);
+	if (! layer) {
+		throw new Error(`no tile layer named ${layerName} in map`);
+	}
 
 	for (const layer of map.layers) {
 		if (layer.type === "tile" && layer.name === layerName) {

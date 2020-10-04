@@ -46,6 +46,13 @@ export interface TileLayer extends Layer {
 	tileIDs: Uint32Array;
 }
 
+export function tileIDAt(layer: TileLayer, x: number, y: number) {
+	if (x < 0 || y < 0 || x >= layer.width || y >= layer.height) {
+		return 0;
+	}
+	return layer.tileIDs[(y * layer.width) + x];
+}
+
 export type TMXLayer = ObjectLayer | TileLayer;
 
 function readLayerProps(layerEl: Element): Layer {
@@ -166,6 +173,16 @@ export interface TMXMap {
 	tileHeight: number;
 	layers: TMXLayer[];
 	tileSets: TileSet[];
+}
+
+export function findLayer(map: TMXMap, type: "object", name: string): ObjectLayer | undefined;
+export function findLayer(map: TMXMap, type: "tile", name: string): TileLayer | undefined;
+export function findLayer(map: TMXMap, type: "object" | "tile", name: string): TMXLayer | undefined {
+	for (const layer of map.layers) {
+		if (type === layer.type && name === layer.name) {
+			return layer;
+		}
+	}
 }
 
 export async function loadTMXMap(url: string): Promise<TMXMap> {
