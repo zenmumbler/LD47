@@ -22,32 +22,32 @@
         // "@typescript-eslint/camelcase": ["error", { "properties": "never", "allow": ["^[A-Za-z][a-zA-Za-z0-9]+_[A-Za-z0-9]+$"] }],
         // "@typescript-eslint/class-name-casing": "error",
         // "@typescript-eslint/interface-name-prefix": "error",
-        "@typescript-eslint/naming-convention": [
-            "error",
-            {
-                "selector": "default",
-                "format": ["camelCase"],
-                "leadingUnderscore": "allow",
-                "trailingUnderscore": "allow"
-            },
-            {
-                "selector": "variable",
-                "format": ["camelCase", "PascalCase", "UPPER_CASE"]
-            },
-            {
-                "selector": "typeLike",
-                "format": ["PascalCase"]
-            },
-            {
-                "selector": "enumMember",
-                "format": ["PascalCase", "UPPER_CASE"]
-            },
-            {
-                "selector": "property",
-                "format": null,
-                "custom": { "regex": "^_?[A-Za-z][A-Za-z0-9_]*_?$", "match": true }
-            }
-        ],
+        // "@typescript-eslint/naming-convention": [
+        //     "error",
+        //     {
+        //         "selector": "default",
+        //         "format": ["camelCase"],
+        //         "leadingUnderscore": "allow",
+        //         "trailingUnderscore": "allow"
+        //     },
+        //     {
+        //         "selector": "variable",
+        //         "format": ["camelCase", "PascalCase", "UPPER_CASE"]
+        //     },
+        //     {
+        //         "selector": "typeLike",
+        //         "format": ["PascalCase"]
+        //     },
+        //     {
+        //         "selector": "enumMember",
+        //         "format": ["PascalCase", "UPPER_CASE"]
+        //     },
+        //     {
+        //         "selector": "property",
+        //         "format": null,
+        //         "custom": { "regex": "^_?[A-Za-z][A-Za-z0-9_]*_?$", "match": true }
+        //     }
+        // ],
 
         "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
         "@typescript-eslint/no-inferrable-types": "error",
@@ -68,7 +68,7 @@
         "@typescript-eslint/unified-signatures": "error",
 
         // eslint
-        "arrow-parens": ["error", "as-needed", { "requireForBlockBody": true }],
+        "arrow-parens": ["error", "as-needed", { "requireForBlockBody": false }],
         "brace-style": ["error", "stroustrup", { "allowSingleLine": true }],
         "constructor-super": "error",
         "curly": ["error", "multi-line"],
@@ -98,7 +98,7 @@
         "no-unused-labels": "error",
         "no-var": "error",
         "object-shorthand": "error",
-        "prefer-const": "error",
+        "prefer-const": "warn",
         "prefer-object-spread": "error",
         "quote-props": ["error", "consistent-as-needed"],
         "space-in-parens": "error",
