@@ -80,7 +80,7 @@
         "no-caller": "error",
         "no-duplicate-case": "error",
         "no-duplicate-imports": "error",
-        "no-empty": "error",
+        "no-empty": "off",
         "no-eval": "error",
         "no-extra-bind": "error",
         "no-fallthrough": "error",
