@@ -7,7 +7,7 @@ https://github.com/zenmumbler/ld47
 import { Input } from "./input";
 import { renderStaticTileLayer, renderSprites, drawCenteredScaled } from "./render";
 import { addEntity, shiftAnimationTimes, updateActors, updateAnimations, visibleSprites } from "./scene";
-import { loadTMXMap, TMXMap } from "./tilemap";
+import { findLayer, loadTMXMap, TMXMap } from "./tilemap";
 import { Player } from "./objects";
 
 let running = true;
@@ -25,9 +25,14 @@ function frame() {
 
 	const { x, y } = player;
 
+	const SCALE = 2;
 	context.clearRect(0, 0, context.canvas.width, context.canvas.height);
-	drawCenteredScaled(bg, x, y, 2, context);
-	renderSprites(context, visibleSprites(), 4);
+	drawCenteredScaled(bg, x, y, SCALE, context);
+	renderSprites(context, visibleSprites(), SCALE);
+	context.beginPath();
+	context.arc(context.canvas.width / 2, context.canvas.height / 2, SCALE * 4, 0, 6.2832);
+	context.fillStyle = "red";
+	context.fill();
 
 	Input.keyboard.resetPerFrameData();
 	if (running) {
@@ -56,8 +61,12 @@ async function main() {
 
 	map = await loadTMXMap("data/map0.xml");
 	bg = renderStaticTileLayer(map, "main");
+	const collision = findLayer(map, "tile", "collision");
+	if (! collision) {
+		throw new Error(`No collision layer in this map!`);
+	}
 
-	player = new Player();
+	player = new Player(collision, map.tileWidth);
 	addEntity(player);
 
 	frame();
