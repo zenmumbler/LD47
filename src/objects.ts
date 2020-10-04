@@ -5,17 +5,17 @@ import { tileIDAt, TileLayer } from "./tilemap";
 
 export class Player implements Entity, Actor, Positioned, Sprite {
 	name = "player";
-	x = 380;
-	y = 236;
-	width = 8;
-	height = 8;
+	x = 316;
+	y = 308;
+	width = 6;
+	height = 6;
 	animations: Record<string, Animation>;
 	curAnim!: string;
 	frameStart = 0;
 	frameIndex = 0;
 	flipHoriz = false;
 	mode = "idle";
-	movementSpeed = 1;
+	movementSpeed = 4;
 	collisionMap: TileLayer;
 	tileDim: number;
 	tileShift: number;
@@ -30,22 +30,17 @@ export class Player implements Entity, Actor, Positioned, Sprite {
 		startAnimation(this, "idle");
 	}
 
-	private tryMove(mx: number, my: number) {
-		const halfWidth = this.width >> 1;
-		const halfHeight = this.height >> 1;
-
-		const sx = this.x + (mx >= 0 ? halfWidth : -halfWidth);
-		const sy = this.y + (my >= 0 ? halfHeight : -halfHeight);
+	private tryMove(sx: number, sy: number, mx: number, my: number) {
 		let dx = sx + mx;
 		let dy = sy + my;
 
-		const stx = (sx - (mx >= 0 ? 1 : 0)) >> this.tileShift;
-		const sty = (sy - (my >= 0 ? 1 : 0)) >> this.tileShift;
-		const dtx = (dx - (mx >= 0 ? 1 : 0)) >> this.tileShift;
-		const dty = (dy - (my >= 0 ? 1 : 0)) >> this.tileShift;
+		const stx = sx >> this.tileShift;
+		const sty = sy >> this.tileShift;
+		const dtx = dx >> this.tileShift;
+		const dty = dy >> this.tileShift;
 
-		const limitX = (dtx + (mx < 0 ? 1 : 0)) << this.tileShift;
-		const limitY = (dty + (my < 0 ? 1 : 0)) << this.tileShift;
+		const limitX = ((dtx + (mx < 0 ? 1 : 0)) << this.tileShift) - (mx > 0 ? 1 : 0);
+		const limitY = ((dty + (my < 0 ? 1 : 0)) << this.tileShift) - (my > 0 ? 1 : 0);
 
 		const coll = this.collisionMap;
 		if (dtx !== stx) {
@@ -75,8 +70,7 @@ export class Player implements Entity, Actor, Positioned, Sprite {
 			}
 		}
 
-		this.x = dx + (mx >= 0 ? -halfWidth : halfWidth);
-		this.y = dy + (my >= 0 ? -halfHeight : halfHeight);
+		return { dx: dx - sx, dy: dy - sy };
 	}
 
 	moveCharacter () {
@@ -94,14 +88,44 @@ export class Player implements Entity, Actor, Positioned, Sprite {
 		else if (Input.down) {
 			dy += this.movementSpeed;
 		}
-		this.tryMove(dx, dy);
+
+		const halfWidth = this.width >> 1;
+		const halfHeight = this.height >> 1;
+
+		if (dx !== 0 || dy !== 0) {
+			const tests = [];
+			tests.push(this.tryMove(
+				this.x - halfWidth,
+				this.y - halfHeight,
+				dx, dy));
+			tests.push(this.tryMove(
+				this.x - halfWidth,
+				this.y + halfHeight - 1,
+				dx, dy));
+			tests.push(this.tryMove(
+				this.x + halfWidth - 1,
+				this.y - halfHeight,
+				dx, dy));
+			tests.push(this.tryMove(
+				this.x + halfWidth - 1,
+				this.y + halfHeight - 1,
+				dx, dy));
+			
+			const movement = tests.reduce((cur, next) => ({
+				dx: Math.min(Math.abs(cur.dx), Math.abs(next.dx)) * Math.sign(cur.dx),
+				dy: Math.min(Math.abs(cur.dy), Math.abs(next.dy)) * Math.sign(cur.dy)
+			}), { dx, dy });
+
+			this.x += movement.dx;
+			this.y += movement.dy;
+		}
 	}
 
 	update() {
 		const usesDirectionKey = Input.left || Input.right || Input.up || Input.down;
 
 		if (Input.use) {
-			//
+			console.info("USE");
 		}
 		else if (usesDirectionKey) {
 			// startAnimation(this, "walk");

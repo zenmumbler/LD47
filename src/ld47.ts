@@ -30,7 +30,7 @@ function frame() {
 	drawCenteredScaled(bg, x, y, SCALE, context);
 	renderSprites(context, visibleSprites(), SCALE);
 	context.beginPath();
-	context.arc(context.canvas.width / 2, context.canvas.height / 2, SCALE * 4, 0, 6.2832);
+	context.arc(context.canvas.width / 2, context.canvas.height / 2, SCALE * 3, 0, 6.2832);
 	context.fillStyle = "red";
 	context.fill();
 
