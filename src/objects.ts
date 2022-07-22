@@ -15,7 +15,7 @@ export class Player implements Entity, Actor, Positioned, Sprite {
 	frameIndex = 0;
 	flipHoriz = false;
 	mode = "idle";
-	movementSpeed = 4;
+	movementSpeed = 1;
 	collisionMap: TileLayer;
 	tileDim: number;
 	tileShift: number;

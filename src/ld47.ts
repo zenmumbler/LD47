@@ -25,7 +25,7 @@ function frame() {
 
 	const { x, y } = player;
 
-	const SCALE = 2;
+	const SCALE = 4;
 	context.clearRect(0, 0, context.canvas.width, context.canvas.height);
 	drawCenteredScaled(bg, x, y, SCALE, context);
 	renderSprites(context, visibleSprites(), SCALE);
